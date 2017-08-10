@@ -1,1 +1,2 @@
 # geneHandle
+deal with genome
