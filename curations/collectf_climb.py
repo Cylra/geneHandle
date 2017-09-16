@@ -52,7 +52,7 @@ if(not os.path.exists('./' + basic_file)):
     genURLFile()
 
 output = subprocess.check_output("wc -l " + basic_file, shell = True).decode("utf-8")
-rows = output[:3]
+rows = output.split()[0] #更正行数统计方法
 cur = 0
 #注册信号
 signal.signal(signal.SIGTSTP, speed)  
@@ -61,9 +61,10 @@ signal.signal(signal.SIGTSTP, speed)
 f = open(basic_file, "r")
 f_dst = open(dst_file, "w")
 oneWeb = f.readline().strip('\n')
+pid = os.getpid() #提前获得进程id
 while(oneWeb):
     cur += 1
-    os.kill(os.getpid(), signal.SIGTSTP)
+    os.kill(pid, signal.SIGTSTP) #避免循环中多次调用函数,增加负担
     getOneWebInfo(oneWeb, f_dst)
     #final
     oneWeb = f.readline().strip('\n')
